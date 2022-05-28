@@ -1,6 +1,6 @@
 const express = require('express')
 const { MongoClient, ServerApiVersion } = require('mongodb');
-
+const jwt = require('cors');
 const cors = require('cors');
 const { ObjectId } = require('mongodb');
 require('dotenv').config();
@@ -25,6 +25,7 @@ await client.connect();
 console.log('Database connected');
 const toolCollection = client.db('manufacturing_company').collection('tools');
 const bookingCollection = client.db('manufacturing_company').collection('bookings');
+const userCollection = client.db('manufacturing_company').collection('users');
 
 
 
@@ -36,6 +37,20 @@ app.get('/tool', async(req, res) =>{
     const tools = await cursor.toArray();
     res.send(tools)
 });
+
+app.put('/user/:email', async(req, res)=>{
+  const email = req.params.email;
+  const user= req.body;
+  const filter = {email: email};
+  const options = {upsert: true};
+  const updateDoc = {
+    $set: user,
+  };
+  const result = await userCollection.updateOne(filter, updateDoc, options);
+  const token = jwt.sign({email:email}, process.env.ACCESS_TOKEN_SECRET,{expiresIn: '1h'})
+  res.send({result, token});
+
+})
 
 app.post('/booking', async(req, res)=>{
   const booking = req.body;
