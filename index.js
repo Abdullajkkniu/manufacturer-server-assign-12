@@ -54,7 +54,7 @@ app.get('/tool', async(req, res) =>{
 });
 
 app.get('/order', async(req,res)=>{
-  const orders= await userCollection.find().toArray();
+  const orders= await bookingCollection.find().toArray();
   res.send(orders);
 })
 
