@@ -90,7 +90,7 @@ app.put('/user/admin/:email',verifyJWT, async(req, res)=>{
  
 
 })
-
+// put method:
 app.put('/user/:email', async(req, res)=>{
   const email = req.params.email;
   const user= req.body;
