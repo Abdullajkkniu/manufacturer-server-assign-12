@@ -53,6 +53,13 @@ app.get('/tool', async(req, res) =>{
     res.send(tools)
 });
 
+app.post('/tool', async(req, res)=>{
+  const newTool = req.body;
+  const result = await toolCollection.insertOne(newTool);
+  res.send(result);
+})
+
+
 app.get('/order', async(req,res)=>{
   const orders= await bookingCollection.find().toArray();
   res.send(orders);
